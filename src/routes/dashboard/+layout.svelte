@@ -1,35 +1,28 @@
 <script>
     import {onMount, setContext} from "svelte";
+    import {writable} from "svelte/store";
     import "../../global.css";
     import Menu from "./Menu.svelte";
     import Loader from "../../components/Loader.svelte";
     import Notifier from "../../components/Notifier.svelte";
 
     let {children} = $props();
-    let notifier = $state(null);
-    let loader = $state(false);
-    let user = $state();
+    let permissions = $state();
 
-    const notify = (type, message)=>{
-        notifier = {
-            type: type,
-            message: message
-        };
-
-        setTimeout(()=>{
-            notifier = null;
-        }, 7500);
-    }
-
-    setContext("notify", notify);
+    const loader = writable(false);
     setContext("loader", loader);
+
+    const notifier = writable(null);
+    setContext("notifier", notifier);
+
+    const user = writable();
     setContext("user", user);
 
     onMount(()=>{
         const userToken = localStorage.getItem("userToken");
         if(!userToken) window.location.href = "/";
 
-        loader = true;
+        loader.set(true);
         fetch(`${import.meta.env.VITE_API_URL}/user`, {
             method: "get",
             headers: {
@@ -39,19 +32,20 @@
         })
             .then(r=>r.json())
             .then((response)=>{
-                user = response;
+                user.set(response);
+                permissions = response.permissions;
             })
             .catch((err)=>{
-                notify("error", "penish");
+                notify("error", "Something went wrong, try refreshing the page");
             })
             .finally(()=>{
-                loader = false;
+                loader.set(false);
             });
     });
 
 </script>
 
-{#if loader}
+{#if $loader}
     <Loader/>
 {/if}
 
@@ -63,15 +57,9 @@
 {/if}
 
 <Menu
-    permissions={user.permissions}
+    permissions={permissions}
 />
 
 <div class="container">
     {@render children()}
 </div>
-
-<style>
-    header{
-        color: var(--text);
-    }
-</style>

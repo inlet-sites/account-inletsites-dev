@@ -1,6 +1,8 @@
 <script>
     import logo from "$lib/logo.png";
 
+    let {permissions} = $props();
+
     const logout = ()=>{
         localStorage.removeItem("userToken");
         window.location.href = "/";
@@ -10,8 +12,15 @@
 <aside>
     <img src={logo} alt="Inlet Sites logo">
 
-    <div class="buttons">
-    </div>
+    {#if permissions}
+        <div class="buttons">
+            <button>Account</button>
+
+            {#if permissions.includes("album")}
+                <button>Albums</button>
+            {/if}
+        </div>
+    {/if}
 
     <div class="bottom">
         <button onclick={logout}>Logout</button>
@@ -33,6 +42,27 @@
 
     aside img{
         width: 50%;
+    }
+
+    .buttons{
+        display: flex;
+        flex-direction: column;
+        margin-top: 35px;
+        padding-left: 35px;
+    }
+
+    .buttons button{
+        font-size: 24px;
+        background: none;
+        border: none;
+        color: var(--text);
+        cursor: pointer;
+        text-align: left;
+        margin: 10px 0;
+    }
+
+    .buttons button:hover{
+        color: gray;
     }
 
     .bottom{
