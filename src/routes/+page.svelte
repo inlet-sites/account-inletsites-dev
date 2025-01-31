@@ -1,9 +1,20 @@
 <script>
     import "../global.css";
     import logo from "$lib/logo.png";
+    import Notifier from "../components/Notifier.svelte";
 
     let email = $state();
     let password = $state();
+    let notifier = $state({type: "", message: ""});
+
+    const notify = (type, message)=>{
+        notifier.type = type;
+        notifier.message = message;
+
+        setTimeout(()=>{
+            notifier.type = "";
+        }, 7500);
+    }
 
     const submit = ()=>{
         fetch(`${import.meta.env.VITE_API_URL}/user/token`, {
@@ -19,14 +30,14 @@
             .then(r=>r.json())
             .then((response)=>{
                 if(response.error){
-                    console.log(response.error.message);
+                    notify("error", response.error.message);
                 }else{
                     localStorage.setItem("userToken", response.token);
-                    console.log(response.token);
+                    window.location.href = "/dashboard";
                 }
             })
             .catch((err)=>{
-                console.log(err);
+                notify("error", "Something went wrong, try refreshing the page.");
             });
     }
 </script>
@@ -34,6 +45,10 @@
 <svelte:head>
     <title>My Account | Inlet Sites</title>
 </svelte:head>
+
+{#if notifier.type}
+    <Notifier type={notifier.type} message={notifier.message}/>
+{/if}
 
 <div class="container">
     <div class="hero">
