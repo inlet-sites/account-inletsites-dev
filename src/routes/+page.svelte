@@ -1,11 +1,14 @@
 <script>
+    import {onMount} from "svelte";
     import "../global.css";
     import logo from "$lib/logo.png";
     import Notifier from "../components/Notifier.svelte";
+    import Loader from "../components/Loader.svelte";
 
     let email = $state();
     let password = $state();
     let notifier = $state({type: "", message: ""});
+    let loader = $state(false);
 
     const notify = (type, message)=>{
         notifier.type = type;
@@ -17,6 +20,7 @@
     }
 
     const submit = ()=>{
+        loader = true;
         fetch(`${import.meta.env.VITE_API_URL}/user/token`, {
             method: "post",
             headers: {
@@ -38,8 +42,16 @@
             })
             .catch((err)=>{
                 notify("error", "Something went wrong, try refreshing the page.");
+            })
+            .finally(()=>{
+                loader = false;
             });
     }
+
+    onMount(()=>{
+        const token = localStorage.getItem("userToken");
+        if(token) window.location.href = "/dashboard";
+    });
 </script>
 
 <svelte:head>
@@ -48,6 +60,10 @@
 
 {#if notifier.type}
     <Notifier type={notifier.type} message={notifier.message}/>
+{/if}
+
+{#if loader}
+    <Loader/>
 {/if}
 
 <div class="container">
@@ -112,5 +128,38 @@
 
     h2{
         font-size: 55px;
+        margin-bottom: 35px;
+    }
+
+    @media screen and (max-width: 1000px){
+        .hero{
+            height: 100px;
+        }
+
+        h1{
+            font-size: 75px;
+        }
+
+        h2{
+            font-size: 35px;
+        }
+    }
+
+    @media screen and (max-width: 700px){
+        .hero{
+            height: 75px;
+        }
+
+        .hero img{
+            margin-right: 15px;
+        }
+
+        h1{
+            font-size: 35px;
+        }
+
+        h2{
+            font-size: 25px;
+        }
     }
 </style>
