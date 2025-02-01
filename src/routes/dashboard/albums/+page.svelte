@@ -56,6 +56,15 @@
     const changePage = (page)=>{
        currentPage = page;
     }
+
+    const updateAlbum = (album)=>{
+        for(let i = 0; i < albums.length; i++){
+            if(albums[i].id === album.id){
+                albums[i] = album;
+                break;
+            }
+        }
+    }
 </script>
 
 <svelte:head>
@@ -79,6 +88,7 @@
         userId={$user.id}
         userToken={userToken}
         album={editAlbum}
+        updateAlbum={updateAlbum}
     />
 {:else}
     <div class="Albums">

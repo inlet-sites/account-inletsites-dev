@@ -1,5 +1,11 @@
 <script>
-    let {changePage, loader, notify, userId, userToken, album} = $props();
+    import {getContext} from "svelte";
+    import EditName from "./EditName.svelte";
+
+    const loader = getContext("loader");
+    const notify = getContext("notify");
+    const userToken = getContext("userToken");
+    let {changePage, userId, album, updateAlbum} = $props();
 </script>
 
 <div class="EditAlbum">
@@ -11,6 +17,11 @@
 
     <h1>Edit Album</h1>
 
+    <EditName 
+        name={album.name}
+        albumId={album.id}
+        updateAlbum={updateAlbum}
+    />
 </div>
 
 <style>
