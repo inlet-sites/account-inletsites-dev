@@ -1,6 +1,7 @@
 <script>
     import {getContext} from "svelte";
     import emptyAlbum from "$lib/emptyAlbum.webp";
+    import NewAlbum from "./NewAlbum.svelte";
 
     const loader = getContext("loader");
     const notify = getContext("notify");
@@ -8,6 +9,7 @@
     const user = getContext("user");
 
     let albums = $state();
+    let newAlbum = $state(false);
 
     loader.set(true);
     fetch(`${import.meta.env.VITE_API_URL}/album/${$user.id}`, {
@@ -44,33 +46,56 @@
         console.log("editing album");
         console.log(album.name);
     }
+
+    const addAlbum = (album)=>{
+        albums.push(album);
+    }
 </script>
 
-<div class="Albums">
-    <header>
-        <h1>My Albums</h1>
+<svelte:head>
+    <title>My Albums | Inlet Sites</title>
+</svelte:head>
 
-        <button class="newAlbum" aria-label="New Album">
-            <svg width="45px" height="45px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" color="#000000">
-                <path d="M8 12H12M16 12H12M12 12V8M12 12V16" stroke="#ff0000bf" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#ff0000bf" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg> 
-        </button>
-    </header>
+{#if newAlbum}
+    <NewAlbum
+        close={()=>{newAlbum = false}}
+        loader={loader}
+        notify={notify}
+        addAlbum={addAlbum}
+        userId={$user.id}
+        userToken={userToken}
+    />
+{:else}
+    <div class="Albums">
+        <header>
+            <h1>My Albums</h1>
 
-    <div class="albums">
-        {#each albums as album}
-            <button 
-                class="album"
-                aria-label="Edit {album.name}"
-                onclick={()=>{edit(album)}}
+            <button
+                class="newAlbum"
+                aria-label="New Album"
+                onclick={()=>{newAlbum = true}}
             >
-                <img src={getAlbumImage(album)} alt="{album.name} Album">
-                <h3>{album.name}</h3>
+                <svg width="45px" height="45px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" color="#000000">
+                    <path d="M8 12H12M16 12H12M12 12V8M12 12V16" stroke="#ff0000bf" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#ff0000bf" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg> 
             </button>
-        {/each}
+        </header>
+
+        <div class="albums">
+            {#each albums as album}
+                <button 
+                    class="album"
+                    aria-label="Edit {album.name}"
+                    onclick={()=>{edit(album)}}
+                >
+                    <img src={getAlbumImage(album)} alt="{album.name} Album">
+                    <h3>{album.name}</h3>
+                </button>
+            {/each}
+        </div>
     </div>
-</div>
+{/if}
 
 <style>
     .Albums{

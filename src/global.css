@@ -26,7 +26,7 @@ body{
     font-size: 18px;
 }
 
-.standardForm input{
+.standardForm input, .standardForm textarea{
     font-size: 28px;
     padding-left: 10px;
 }
