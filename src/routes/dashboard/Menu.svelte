@@ -1,7 +1,7 @@
 <script>
     import logo from "$lib/logo.png";
 
-    let {permissions} = $props();
+    let {permissions, isOpen, close} = $props();
 
     const logout = ()=>{
         localStorage.removeItem("userToken");
@@ -9,7 +9,13 @@
     }
 </script>
 
-<aside>
+<aside class={isOpen ? "" : "closed"}>
+    <button class="closeIcon" onclick={close}>
+        <svg width="45px" height="45px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" color="#000000">
+            <path d="M6.75827 17.2426L12.0009 12M17.2435 6.75736L12.0009 12M12.0009 12L6.75827 6.75736M12.0009 12L17.2435 17.2426" stroke="#ff0000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+    </button>
+
     <img src={logo} alt="Inlet Sites logo">
 
     {#if permissions}
@@ -29,9 +35,6 @@
 
 <style>
     aside{
-        position: fixed;
-        top: 0;
-        left: 0;
         background: black;
         border-right: 1px solid rgba(255, 0, 0, 0.35);
         width: 250px;
@@ -78,5 +81,46 @@
         background: none;
         border: none;
         cursor: pointer;
+    }
+
+    .closeIcon{
+        display: none;
+    }
+
+    @media screen and (max-width: 800px){
+        aside{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100vw;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 3;
+            border-right: none;
+        }
+
+        aside img{
+            width: 150px;
+            margin-top: 35px;
+        }
+
+        .buttons a{
+            font-size: 32px;
+            margin: 35px 0;
+        }
+
+        .closeIcon{
+            display: flex;
+            position: absolute;
+            top: 35px;
+            right: 35px;
+            background: none;
+            border: none;
+        }
+
+        .closed{
+            display: none;
+        }
     }
 </style>

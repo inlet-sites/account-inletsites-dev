@@ -1,6 +1,7 @@
 <script>
     import {onMount, setContext} from "svelte";
     import {writable} from "svelte/store";
+    import {afterNavigate} from "$app/navigation";
     import "../../global.css";
     import Menu from "./Menu.svelte";
     import Loader from "../../components/Loader.svelte";
@@ -9,6 +10,13 @@
     let {children} = $props();
     let permissions = $state();
     let notifier = $state(null);
+    let menuOpen = $state(false);
+    afterNavigate(()=>{
+        menuOpen = false;
+    });
+    $effect(()=>{
+        document.body.style.overflow = menuOpen ? "hidden" : "visible";
+    })
 
     const loader = writable(false);
     setContext("loader", loader);
@@ -54,6 +62,13 @@
             });
     });
 
+    const openMenu = ()=>{
+        menuOpen = true;
+    }
+
+    const closeMenu = ()=>{
+        menuOpen = false;
+    }
 </script>
 
 {#if $loader}
@@ -68,8 +83,18 @@
 {/if}
 
 <div class="container">
+    <button class="openMenuIcon" onclick={openMenu}>
+        <svg width="45px" height="45px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" color="#000000">
+            <path d="M3 5H21" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M3 12H21" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M3 19H21" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+    </button>
+
     <Menu
         permissions={permissions}
+        isOpen={menuOpen}
+        close={closeMenu}
     />
 
     {#if $user}
@@ -84,10 +109,27 @@
         display: flex;
         height: 100vh;
         width: 100vw;
+        position: relative;
     }
 
     .children{
         height: 100vh;
         width: calc(100vw - 250px);
+    }
+
+    .openMenuIcon{
+        display: none;
+    }
+
+    @media screen and (max-width: 800px){
+        .openMenuIcon{
+            display: flex;
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: none;
+            border: none;
+            z-index: 2;
+        }
     }
 </style>
