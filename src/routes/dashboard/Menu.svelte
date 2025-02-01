@@ -14,10 +14,10 @@
 
     {#if permissions}
         <div class="buttons">
-            <button>Account</button>
+            <a href="/dashboard/account">Account</a>
 
             {#if permissions.includes("album")}
-                <button>Albums</button>
+                <a href="/dashboard/albums">Albums</a>
             {/if}
         </div>
     {/if}
@@ -51,7 +51,7 @@
         padding-left: 35px;
     }
 
-    .buttons button{
+    .buttons a{
         font-size: 24px;
         background: none;
         border: none;
@@ -59,9 +59,10 @@
         cursor: pointer;
         text-align: left;
         margin: 10px 0;
+        text-decoration: none;
     }
 
-    .buttons button:hover{
+    .buttons a:hover{
         color: gray;
     }
 

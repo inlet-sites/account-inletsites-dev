@@ -56,10 +56,25 @@
     />
 {/if}
 
-<Menu
-    permissions={permissions}
-/>
-
 <div class="container">
-    {@render children()}
+    <Menu
+        permissions={permissions}
+    />
+
+    <div class="children">
+        {@render children()}
+    </div>
 </div>
+
+<style>
+    .container{
+        display: flex;
+        height: 100vh;
+        width: 100vw;
+    }
+
+    .children{
+        height: 100vh;
+        width: calc(100vw - 250px);
+    }
+</style>
