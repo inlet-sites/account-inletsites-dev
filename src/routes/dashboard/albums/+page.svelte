@@ -47,9 +47,16 @@
 </script>
 
 <div class="Albums">
-    <h1>My Albums</h1>
+    <header>
+        <h1>My Albums</h1>
 
-    <button class="button newAlbum">Create New</button>
+        <button class="newAlbum" aria-label="New Album">
+            <svg width="45px" height="45px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" color="#000000">
+                <path d="M8 12H12M16 12H12M12 12V8M12 12V16" stroke="#ff0000bf" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#ff0000bf" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg> 
+        </button>
+    </header>
 
     <div class="albums">
         {#each albums as album}
@@ -74,10 +81,17 @@
         position: relative;
     }
 
+    header{
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        height: 50px;
+    }
+
     .newAlbum{
-        position: absolute;
-        top: 35px;
-        right: 35px;
+        background: none;
+        border: none;
+        cursor: pointer;
     }
 
     .albums{
@@ -110,5 +124,19 @@
 
     .album h3{
         font-size: 22px;
+    }
+
+    @media screen and (max-width: 800px){
+        header{
+            padding-left: 55px;
+        }
+    }
+
+    @media screen and (max-width: 500px){
+        header{
+            padding: 0;
+            flex-direction: column;
+            align-items: center;
+        }
     }
 </style>

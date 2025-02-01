@@ -131,5 +131,9 @@
             border: none;
             z-index: 2;
         }
+
+        .children{
+            width: 100vw;
+        }
     }
 </style>
