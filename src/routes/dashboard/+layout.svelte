@@ -8,12 +8,22 @@
 
     let {children} = $props();
     let permissions = $state();
+    let notifier = $state(null);
 
     const loader = writable(false);
     setContext("loader", loader);
 
-    const notifier = writable(null);
-    setContext("notifier", notifier);
+    const notify = (type, message)=>{
+        notifier = {
+            type: type,
+            message: message
+        };
+
+        setTimeout(()=>{
+            notifier = null;
+        }, 7500);
+    }
+    setContext("notify", notify);
 
     const user = writable();
     setContext("user", user);
@@ -21,6 +31,7 @@
     onMount(()=>{
         const userToken = localStorage.getItem("userToken");
         if(!userToken) window.location.href = "/";
+        setContext("userToken", userToken);
 
         loader.set(true);
         fetch(`${import.meta.env.VITE_API_URL}/user`, {
@@ -61,9 +72,11 @@
         permissions={permissions}
     />
 
-    <div class="children">
-        {@render children()}
-    </div>
+    {#if $user}
+        <div class="children">
+            {@render children()}
+        </div>
+    {/if}
 </div>
 
 <style>
