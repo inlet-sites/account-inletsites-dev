@@ -1,6 +1,7 @@
 <script>
     import {getContext} from "svelte";
     import EditName from "./EditName.svelte";
+    import EditDescription from "./EditDescription.svelte";
 
     const loader = getContext("loader");
     const notify = getContext("notify");
@@ -19,6 +20,12 @@
 
     <EditName 
         name={album.name}
+        albumId={album.id}
+        updateAlbum={updateAlbum}
+    />
+
+    <EditDescription
+        description={album.description}
         albumId={album.id}
         updateAlbum={updateAlbum}
     />
