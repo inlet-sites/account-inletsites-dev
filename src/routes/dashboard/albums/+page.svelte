@@ -2,6 +2,7 @@
     import {getContext} from "svelte";
     import emptyAlbum from "$lib/emptyAlbum.webp";
     import NewAlbum from "./NewAlbum.svelte";
+    import EditAlbum from "./EditAlbum.svelte";
 
     const loader = getContext("loader");
     const notify = getContext("notify");
@@ -9,7 +10,8 @@
     const user = getContext("user");
 
     let albums = $state();
-    let newAlbum = $state(false);
+    let editAlbum = $state();
+    let currentPage = $state("main");
 
     loader.set(true);
     fetch(`${import.meta.env.VITE_API_URL}/album/${$user.id}`, {
@@ -43,12 +45,16 @@
     }
 
     const edit = (album)=>{
-        console.log("editing album");
-        console.log(album.name);
+        editAlbum = album;
+        currentPage = "editAlbum";
     }
 
     const addAlbum = (album)=>{
         albums.push(album);
+    }
+
+    const changePage = (page)=>{
+       currentPage = page;
     }
 </script>
 
@@ -56,14 +62,23 @@
     <title>My Albums | Inlet Sites</title>
 </svelte:head>
 
-{#if newAlbum}
+{#if currentPage === "newAlbum"}
     <NewAlbum
-        close={()=>{newAlbum = false}}
+        changePage={changePage}
         loader={loader}
         notify={notify}
         addAlbum={addAlbum}
         userId={$user.id}
         userToken={userToken}
+    />
+{:else if currentPage === "editAlbum"}
+    <EditAlbum
+        changePage={changePage}
+        loader={loader}
+        notify={notify}
+        userId={$user.id}
+        userToken={userToken}
+        album={editAlbum}
     />
 {:else}
     <div class="Albums">
@@ -73,7 +88,7 @@
             <button
                 class="newAlbum"
                 aria-label="New Album"
-                onclick={()=>{newAlbum = true}}
+                onclick={()=>{currentPage = "newAlbum"}}
             >
                 <svg width="45px" height="45px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" color="#000000">
                     <path d="M8 12H12M16 12H12M12 12V8M12 12V16" stroke="#ff0000bf" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
