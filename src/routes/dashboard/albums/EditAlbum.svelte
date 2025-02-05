@@ -2,12 +2,14 @@
     import {getContext} from "svelte";
     import EditName from "./EditName.svelte";
     import EditDescription from "./EditDescription.svelte";
+    import PhotoDescription from "./PhotoDescription.svelte";
 
     const loader = getContext("loader");
     const notify = getContext("notify");
     const userToken = getContext("userToken");
     let {changePage, userId, album, updateAlbum} = $props();
     let newImages = $state();
+    let photoDescription = $state();
 
     const photoFile = (photo)=>{
         return `${import.meta.env.VITE_API_URL}/document/${photo.file}`;
@@ -72,6 +74,15 @@
 </script>
 
 <div class="EditAlbum">
+    {#if photoDescription}
+        <PhotoDescription
+            photo={photoDescription}
+            albumId={album.id}
+            updateAlbum={updateAlbum}
+            close={()=>{photoDescription = null}}
+        />
+    {/if}
+
     <button class="closeIcon" onclick={()=>{changePage("main")}}>
         <svg width="45px" height="45px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" color="#000000">
             <path d="M6.75827 17.2426L12.0009 12M17.2435 6.75736L12.0009 12M12.0009 12L6.75827 6.75736M12.0009 12L17.2435 17.2426" stroke="#ff0000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -118,7 +129,15 @@
                     </svg>
                 </button>
                 <img src={photoFile(photo)} alt={photo.file}>
-                <p class="photoDescription">{photo.description}</p>
+                <button
+                    class="photoDescription"
+                    onclick={()=>{photoDescription = photo}}
+                >{photo.description}</button>
+                <button
+                    aria-label="Edit description"
+                    class="mobileButton"
+                    onclick={()=>{photoDescription = photo}}
+                ></button>
             </div>
         {/each}
     </div>
@@ -165,7 +184,6 @@
     .photo{
         width: 250px;
         position: relative;
-        cursor: pointer;
         border: 1px solid rgba(255, 0, 0, 0.35);
         margin: 35px;
     }
@@ -195,10 +213,42 @@
         position: absolute;
         top: 0;
         left: 0;
-        background: rgba(255, 255, 255, 0.55);
-        color: black;
+        background: rgba(0, 0, 0, 0.75);
+        color: white;
         height: 100%;
         width: 100%;
         padding: 5px;
+        cursor: pointer;
+        border: none;
+        overflow: hidden;
+    }
+
+    .mobileButton{
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: none;
+        border: none;
+    }
+
+    @media screen and (max-width: 800px){
+        .photo:hover .photoDescription{
+            display: none;
+        }
+
+        .mobileButton{
+            display: flex;
+        }
+
+        .photos{
+            padding-top: 55px;
+        }
+
+        .addPhotoButton{
+            right: calc(50% - (35px / 2));
+        }
     }
 </style>
