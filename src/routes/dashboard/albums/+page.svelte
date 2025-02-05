@@ -126,9 +126,10 @@
     .Albums{
         color: var(--text);
         padding: 35px;
-        height: 100%;
+        height: 100vh;
         width: 100%;
         position: relative;
+        overflow-y: auto;
     }
 
     header{

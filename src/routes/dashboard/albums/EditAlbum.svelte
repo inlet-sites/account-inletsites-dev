@@ -148,6 +148,8 @@
         color: var(--text);
         padding: 35px;
         position: relative;
+        height: 100vh;
+        overflow-y: auto;
     }
 
     .closeIcon{
