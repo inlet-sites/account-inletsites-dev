@@ -96,4 +96,10 @@
     .standardForm{
         max-width: 550px;
     }
+
+    @media screen and (max-width: 500px){
+        p{
+            font-size: 18px;
+        }
+    }
 </style>

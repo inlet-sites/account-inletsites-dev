@@ -3,6 +3,7 @@
     import EditName from "./EditName.svelte";
     import EditDescription from "./EditDescription.svelte";
     import PhotoDescription from "./PhotoDescription.svelte";
+    import Modal from "../../../components/Modal.svelte";
 
     const loader = getContext("loader");
     const notify = getContext("notify");
@@ -10,9 +11,15 @@
     let {changePage, userId, album, updateAlbum} = $props();
     let newImages = $state();
     let photoDescription = $state();
+    let deleteModal = $state(false);
 
     const photoFile = (photo)=>{
         return `${import.meta.env.VITE_API_URL}/document/${photo.file}`;
+    }
+
+    const confirmDelete = ()=>{
+        console.log("delete confirmed");
+        deleteModal = false;
     }
 
     const addPhotos = ()=>{
@@ -72,6 +79,14 @@
             });
     }
 </script>
+
+{#if deleteModal}
+    <Modal
+        type="deleteModal"
+        close={()=>{deleteModal = false}}
+        action={confirmDelete}
+    />
+{/if}
 
 <div class="EditAlbum">
     {#if photoDescription}
@@ -140,6 +155,11 @@
                 </div>
             {/each}
         </div>
+
+        <button
+            class="button deleteAlbum"
+            onclick={()=>{deleteModal = true}}
+        >Delete Album</button>
     {/if}
 </div>
 
@@ -234,6 +254,11 @@
         width: 100%;
         background: none;
         border: none;
+    }
+
+    .deleteAlbum{
+        background: red;
+        color: var(--text);
     }
 
     @media screen and (max-width: 800px){
