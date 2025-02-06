@@ -8,13 +8,14 @@
     import Loader from "../../components/Loader.svelte";
     import Notifier from "../../components/Notifier.svelte";
 
-    const currentPage = $page.url.pathname.split("/")[2];
+    let currentPage = $state($page.url.pathname.split("/")[2]);
     let {children} = $props();
     let permissions = $state();
     let notifier = $state(null);
     let menuOpen = $state(false);
     afterNavigate(()=>{
         menuOpen = false;
+        currentPage = $page.url.pathname.split("/")[2];
     });
     $effect(()=>{
         document.body.style.overflow = menuOpen ? "hidden" : "visible";
