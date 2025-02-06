@@ -86,7 +86,7 @@
 {/if}
 
 <div class="container">
-    <button class="openMenuIcon" onclick={openMenu}>
+    <button class="openMenuIcon" onclick={openMenu} aria-label="Open menu">
         <svg width="45px" height="45px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" color="#000000">
             <path d="M3 5H21" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
             <path d="M3 12H21" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
