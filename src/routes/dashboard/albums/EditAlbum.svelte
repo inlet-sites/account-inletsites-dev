@@ -18,8 +18,29 @@
     }
 
     const confirmDelete = ()=>{
-        console.log("delete confirmed");
-        deleteModal = false;
+        loader.set(true);
+        fetch(`${import.meta.env.VITE_API_URL}/album/${album.id}`, {
+            method: "delete",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${userToken}`
+            }
+        })
+            .then(r=>r.json())
+            .then((response)=>{
+                if(response.error){
+                    notify("error", response.error.message);
+                }else{
+
+                }
+            })
+            .catch((err)=>{
+                notify("error", "Something went wrong, try refreshing the page");
+            })
+            .finally(()=>{
+                loader.set(false);
+                deleteModal = false;
+            });
     }
 
     const addPhotos = ()=>{

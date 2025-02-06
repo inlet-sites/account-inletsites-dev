@@ -2,11 +2,13 @@
     import {onMount, setContext} from "svelte";
     import {writable} from "svelte/store";
     import {afterNavigate} from "$app/navigation";
+    import {page} from "$app/stores";
     import "../../global.css";
     import Menu from "./Menu.svelte";
     import Loader from "../../components/Loader.svelte";
     import Notifier from "../../components/Notifier.svelte";
 
+    const currentPage = $page.url.pathname.split("/")[2];
     let {children} = $props();
     let permissions = $state();
     let notifier = $state(null);
@@ -92,6 +94,7 @@
     </button>
 
     <Menu
+        page={currentPage}
         permissions={permissions}
         isOpen={menuOpen}
         close={closeMenu}

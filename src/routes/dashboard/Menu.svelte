@@ -1,7 +1,7 @@
 <script>
     import logo from "$lib/logo.png";
 
-    let {permissions, isOpen, close} = $props();
+    let {page, permissions, isOpen, close} = $props();
 
     const logout = ()=>{
         localStorage.removeItem("userToken");
@@ -20,10 +20,16 @@
 
     {#if permissions}
         <div class="buttons">
-            <a href="/dashboard/account">Account</a>
+            <a
+                class={page === "account" ? "active" : ""}
+                href="/dashboard/account"
+            >Account</a>
 
             {#if permissions.includes("album")}
-                <a href="/dashboard/albums">Albums</a>
+                <a
+                    class={page === "albums" ? "active" : ""}
+                    href="/dashboard/albums"
+                >Albums</a>
             {/if}
         </div>
     {/if}
@@ -85,6 +91,10 @@
 
     .closeIcon{
         display: none;
+    }
+
+    .buttons .active{
+        color: rgba(255, 0, 0, 0.75);
     }
 
     @media screen and (max-width: 800px){

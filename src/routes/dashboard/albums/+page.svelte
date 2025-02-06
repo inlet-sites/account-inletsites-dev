@@ -1,5 +1,6 @@
 <script>
-    import {getContext} from "svelte";
+    import {getContext, onMount} from "svelte";
+    import {afterNavigate} from "$app/navigation";
     import emptyAlbum from "$lib/emptyAlbum.webp";
     import NewAlbum from "./NewAlbum.svelte";
     import EditAlbum from "./EditAlbum.svelte";
@@ -12,6 +13,10 @@
     let albums = $state();
     let editAlbum = $state();
     let currentPage = $state("main");
+
+    afterNavigate(()=>{
+        currentPage = "main";
+    });
 
     loader.set(true);
     fetch(`${import.meta.env.VITE_API_URL}/album/${$user.id}`, {
