@@ -97,6 +97,10 @@
         color: rgba(255, 0, 0, 0.75);
     }
 
+    .buttons .active:hover{
+        color: rgba(255, 0, 0, 0.55);
+    }
+
     @media screen and (max-width: 800px){
         aside{
             display: flex;
