@@ -4,5 +4,4 @@ import {handler} from "./build/handler.js";
 
 const app = express();
 app.use(handler);
-
-export default app;
+app.listen(8005);
